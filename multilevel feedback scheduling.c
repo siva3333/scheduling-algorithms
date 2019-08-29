@@ -1,0 +1,188 @@
+#include<stdio.h>
+int main()
+{
+    int i,tq,tq1,j,k=0,p=0,c,s=0,te,r,x,d,v;
+    static int n;
+    printf("enter the no.of processes");
+    scanf("%d",&n);
+    float a[n],wt[n],ta[n],b[n],o[n],t[n],f[n],temp,w,tem,ct,tb[n];
+    for(i=0;i<n;i++)
+    {
+        printf("enter the arrival time");
+        scanf("%f",&a[i]);
+        printf("enter the burst time");
+        scanf("%f",&b[i]);
+    }
+    printf("enter the time quantum");
+    scanf("%d",&tq);
+    printf("enter the time quantum of second processor");
+    scanf("%d",&tq1);
+    for(i=0;i<n;i++)
+       {
+              for(j=i+1;j<n;j++)
+              {
+                     if(a[j]<a[i])
+                     {
+                            temp=a[j];
+                            a[j]=a[i];
+                            a[i]=temp;
+                            temp=b[j];
+                            b[j]=b[i];
+                            b[i]=temp;
+                     }
+              }
+       }
+       for(i=0;i<n;i++)
+       {
+           tb[i]=b[i];
+       }
+       ct=a[0];
+       for(i=0;i<n;i++)
+           {
+               if(a[i]==ct)
+               {
+                   o[k]=i;
+                   k++;
+               }
+           }
+       c=n;
+       while(c>0)
+       {
+           d:
+           if(k)
+           {
+               te=o[0];
+               for(x=0;x<tq;x++)
+               {
+                   if(b[te]==0)
+                   {
+                       break;
+                   }
+                   b[te]--;
+                   ct++;
+                   for(i=0;i<n;i++)
+                   {
+                       if(a[i]==ct)
+                       {
+                           o[k]=i;
+                           k++;
+                       }
+                   }
+               }
+               if(b[te]>0)
+               {
+                   t[s]=te;
+                   s++;
+               }
+               else
+               {
+                   printf("%f\t 1\n",ct);
+                   ta[te]=ct-a[te];
+                   c--;
+               }
+               for(i=0;i<k;i++)
+               {
+                   o[i]=o[i+1];
+               }
+               k--;
+           }
+           else if(s)
+           {
+               te=t[0];
+               for(x=0;x<tq1;x++)
+               {
+                   v=0;
+                   b[te]--;
+                   ct++;
+                   for(i=0;i<n;i++)
+                   {
+                       if(a[i]==ct)
+                       {
+                           v=1;
+                           o[k]=i;
+                           k++;
+                       }
+                   }
+                   if(b[te]==0)
+                   {
+                       break;
+                   }
+                   if(v==1)
+                   {
+                       goto d;
+                   }
+               }
+               if(b[te]>0)
+               {
+                   f[p]=te;
+                   p++;
+               }
+               else
+               {
+                   printf("%f\t2\n",ct);
+                   ta[te]=ct-a[te];
+                   c--;
+               }
+               for(i=0;i<s;i++)
+               {
+                   t[i]=t[i+1];
+               }
+               s--;
+           }
+           else
+           {
+               te=f[0];
+               tem=b[te];
+               for(x=0;x<tem;x++)
+               {
+                   v=0;
+                   b[te]--;
+                   ct++;
+                   for(i=0;i<n;i++)
+                   {
+                       if(a[i]==ct)
+                       {
+                           v=1;
+                           o[k]=i;
+                           k++;
+                       }
+                   }
+                    if(b[te]==0)
+                   {
+                       break;
+                   }
+                   if(v==1)
+                   {
+                       goto d;
+                   }
+               }
+               c--;
+               printf("%f\t3\n",ct);
+               ta[te]=ct-a[te];
+               for(i=0;i<p;i++)
+               {
+                   f[i]=f[i+1];
+               }
+               p--;
+           }
+       }
+        for(i=0;i<n;i++)
+       {
+              wt[i]=ta[i]-tb[i];
+       }
+       printf("pid\twaiting time\tturn around time\n");
+       w=0;
+       tem=0;
+       for(i=0;i<n;i++)
+       {
+              w+=wt[i];
+              tem+=ta[i];
+              printf("%d\t",i+1);
+              printf("%f\t",wt[i]);
+              printf("%f\n",ta[i]);
+       }
+       w=w/n;
+       tem=tem/n;
+       printf("average waiting time is %f\n",w);
+       printf("average turn around time is %f",tem);
+}

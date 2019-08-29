@@ -1,0 +1,149 @@
+#include<stdio.h>
+int main()
+{
+    int i,k,j,n,c,s,ch;
+    printf("enter the no.of processors");
+    scanf("%d",&n);
+    float a[n],b[n],p[n],ta[n],wt[n],w,t,ct,temp,min,tb[n],m,mi;
+    for(i=0; i<n; i++)
+    {
+        printf("enter the arrival time");
+        scanf("%f",&a[i]);
+        printf("enter the burst time");
+        scanf("%f",&b[i]);
+        printf("enter the priority time");
+        scanf("%f",&p[i]);
+    }
+    m=p[0];
+    mi=p[0];
+    min=a[0];
+    for(i=0;i<n;i++)
+    {
+        if(p[i]>m)
+        {
+            m=p[i];
+        }
+        if(p[i]<mi)
+        {
+            mi=p[i];
+        }
+        if(a[i]<min)
+        {
+            min=a[i];
+        }
+    }
+    c=0;
+    ct=min;
+    printf("to which number you want to give high priority\n");
+    printf("1.low\n2.high");
+    scanf("%d",&ch);
+    switch(ch)
+    {
+    case 1:
+                for(i=0;i<n;i++)
+                    {
+                        for(j=i+1;j<n;j++)
+                        {
+                        if(p[j]<p[i])
+                        {
+                            temp=a[j];
+                            a[j]=a[i];
+                            a[i]=temp;
+                            temp=b[j];
+                            b[j]=b[i];
+                            b[i]=temp;
+                            temp=p[j];
+                            p[j]=p[i];
+                            p[i]=temp;
+                        }
+                        }
+                    }
+                for(i=0;i<n;i++)
+                {
+                    tb[i]=b[i];
+                }
+                while(c<n)
+                {
+                min=m;
+              for(i=0;i<n;i++)
+              {
+                     if((p[i]<=min)&&(a[i]<=ct)&&(b[i]>0))
+                     {
+                            min=p[i];
+                            s=i;
+                     }
+              }
+               ct++;
+              b[s]--;
+              if(b[s]<=0)
+              {
+                  printf("%f\t%d\t",ct,s);
+                  ta[s]=ct-a[s];
+                     c++;
+              }
+                }
+                break;
+    case 2:
+            for(i=0;i<n;i++)
+                {
+                    for(j=i+1;j<n;j++)
+                    {
+                        if(p[j]>p[i])
+                        {
+                            temp=a[j];
+                            a[j]=a[i];
+                            a[i]=temp;
+                            temp=b[j];
+                            b[j]=b[i];
+                            b[i]=temp;
+                            temp=p[j];
+                            p[j]=p[i];
+                            p[i]=temp;
+                        }
+                    }
+                }
+                for(i=0;i<n;i++)
+                {
+                    tb[i]=b[i];
+                }
+          while(c<n)
+                {
+                min=mi;
+              for(i=0;i<n;i++)
+              {
+                     if((p[i]>=min)&&(a[i]<=ct)&&(b[i]>0))
+                     {
+                            min=p[i];
+                            s=i;
+                     }
+              }
+               ct++;
+              b[s]--;
+              if(b[s]==0)
+              {
+                  printf("%f\t%d\t",ct,s);
+                  ta[s]=ct-a[s];
+                     c++;
+              }
+                }
+    }
+    for(i=0;i<n;i++)
+    {
+        wt[i]=ta[i]-tb[i];
+    }
+    printf("pid\twaiting time\tturn around time\n");
+    w=0;
+    t=0;
+    for(i=0;i<n;i++)
+    {
+        w+=wt[i];
+        t+=ta[i];
+        printf("%d\t",i+1);
+        printf("%f\t",wt[i]);
+        printf("%f\n",ta[i]);
+    }
+    w=w/n;
+    t=t/n;
+    printf("average waiting time is %f\n",w);
+    printf("average turn around time is %f",t);
+}
